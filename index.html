@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NIOS Timing Analysis</title>
+	<style>
+    body {background-color: powderblue;}
+    h1 {color: blue;
+    	align-content: center;
+    	text-align: center; 
+    	text-decoration: underline;}
+    h2 {color: black;
+    	align-content: center;
+    	text-align: center;
+    	text-decoration: underline;}
+    p {color: black;}
+    li { font-style: italic;
+    	text-decoration: overline;}
+  </style>
+
+</head>
+<body>
+<p> This file will give the overview of the project.</p>
+<h1>Goal</h1>
+	<p> The goal of the project was to analyze the timing of NIOS processor in DE1-SoC board. The processor runs at 100Mhz (period t = 10 nanoseconds).</p>
+<h1> Step 1</h1>
+	<p> A simple application to toggle output on a pin was created. For this, the parallel port at location 0xff200060 is used. One of the pins, D0, was configured as output.</p>
+	<p> Using a simple infinite loop, the output on D0 was toggled. The goal was to see the maximum achievable toggle frequency.</p>
+	<h2> Code 1</h2>
+		<p> Following is the code that was used for this purpose. The final code in the <a href="timing_nios.s"> source file </a> might have been edited already.</p>
+			<img src="images/code_1.PNG" alt="Should be image for code 1" height="100" style="display: block;margin-right: auto;margin-left: auto;">
+	<h2> Observation 1</h2>
+		<p> Following is the output obtained as observed in the oscilloscope.</p>
+			<img src="images/osc_1.jpg" alt="Should be observation for code 1" height="200" style="display: block;margin-right: auto;margin-left: auto;">
+	<h2> Computation 1</h2>
+		<p> From the image in Observation 1, we can see the period of the signal is <b> 112.5 nanoseconds.</b>, which is the time for a complete cylce of waveform. This indicates the time taken by the three lines of assembly code is 112.5/2 = <b>56.25 nanoseconds</b>.</p>
+
+<h1> Step 2</h1>
+		<p> The <a href="timing_nios.s"> code </a> was slighly modified. A nop instruction was added before the value is toggled. In NIOS, a nop instruction does not exist. This means, the nop instruction will be replaced by <i>add zero, zero, zero</i>.</p>
+	<h2> Code 2</h2>
+		<p> Following is the code that was used for this purpose.</p>
+			<img src="images/code_2.PNG" alt="Should be image for code 2" height="100" style="display: block;margin-right: auto;margin-left: auto;">
+	<h2> Observation 2</h2>
+		<p> Following is the output obtained as observed in the oscilloscope.</p>
+			<img src="images/osc_2.jpg" alt="Should be observation for code 2" height="200" style="display: block;margin-right: auto;margin-left: auto;">
+	<h2> Computation 2</h2>
+		<p> From the image in Observation 2, we can see the period of the signal is <b> 140 nanoseconds.</b>, which is the time for a complete cylce of waveform. This indicates the time taken by the four lines of assembly code is 140/2 = <b>70 nanoseconds</b>.</p>
+		<p> This shows that adding one nop instruction takes additional 
+		<br> <i> 70-56.25 nanoseconds</i> 
+		<br> <i>  = 13.75 nanoseconds </i>
+	</p>
+
+
+</body>
+</html>
